@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>OBLIG 5 Testapplikasjon</h2>
+<p>Oppgaven er å studere koden, forstå arkitekturen og endre koden på spesifikke steder for å implementere et bruksscenario.
+</p>
+
+<p>For å installere denne demoen gjøre følgende:
+<ul>
+<li><a href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/fork-a-repo">Forke</a> repository</li>
+<li>Lage en ny Excel-fil med navn <b>kgdata.xlsx</b> og lagre den i mappen <b>barnehage</b>. Det anbefales å installere <a href="https://www.openoffice.org/download/">OpenOffice</a> 
+eller <a href="https://www.libreoffice.org/download/download-libreoffice/">LibreOffice</a> for administrasjon av Excel-filer.</li>
+<li>Åpne filen fra <b>barnehage/kg.py</b> i Thonny og utføre den.</li>
+<li>Fra Shell i Thonny selekter lenken http://127.0.0.1:5000, som da skal vise en side i 'default' nettleser.</li>
+<li>For å sette inn initielle data i databasen (filen <b>kgdata.xlsx</b>), åpne og utføre filen <b>initiatedb.py</b></li>
+<li>Etter å ha brukt formen for søknad, kan du lagre dataene permanent med "commit" (meny-element øverst til høyre på siden)</li>
+</ul>
+<p>
+
+<p>Ta kontakt med Janis, hvis du har spørsmål.</p>
+
+<h2>Oppgaver</h2>
+
+<h3>Oppgave 1</h3>
+<p>Brukerscenarioet: En bruker søker om barnehageplass og ønsker å få umiddelbar respons på AVSLAG/TILBUD.</p>
+<p>Endre svar.html malen slik at brukeren får en umiddelbar respons. Det må taes hensyn til antall ledige plasser og eventuell fortrinnsrett.</p>
+
+<h3>Oppgave 2</h3>
+<p>Brukerscenarioet: En administrator ønsker å få oversikt over alle søknadene.</p>
+<p>Lag et nytt meny-element "Søknader", som, når brukeren velger den, viser alle søknadene i databasen med relevant status AVSLAG/TILBUD.
+Du må sjekke for antall ledige plasser og vise frem eventuell fortrinnsrett.</p>
+
+<h3>Oppgave 3</h3>
+<p>Brukerscenarioet: Adminstrator ønsker å ha tilbakemelding at alle dataene er lagret permanent i databasen (filen kgdata.xlsx)
+<p>Endre responsen til ruten "commit". Responsen til denne ruten skal liste ut all data fra databasen (filen kgdata.xlsx). Endre commit.html malen.
+</p>
+
+<h3>Oppgave 4</h3>
+<p>Brukerscenarioet: En bruker ønsker å statistikk av prosentandel barn i barnehagen i 1-2 års alderene for en valgt kommune. 
+<p>Lag et nytt meny-element "Statistikk", hvor du viser frem grafikk for utvikling av prosentandel barn i barnehage i 1-2 års 
+alderen for en valgt kommune. Bruk koden fra OBLIG 3.</p>
+
+<h2>Arkitektur (litt teori)</h2>
+
+<p>En webapplikasjon er basert på en rekke teknologier, som er blitt utviklet i løpet av de 
+siste ca. 60 årene. 
+Disse teknologiene gjør det mulig å sende meldinger mellom datamaskiner over store avstander, 
+og behandle data i hver av disse datamaskinene.</p>
+
+<img src="{{url_for('static', filename='images/klient-server-model.png')}}" height="500" class="center" />
+<p>Enhver kommunikasjon inkluderer (minst) 2 noder, - en KLIENT-maskin, hvor en forespørsel 
+blir laget, og en SERVER-maskin, som behandler denne forespørselen. Det blir kalt 
+<b>KLIENT/SERVER-modell</b> (se Figur ovenfor).</p>
+
+<p>En utbredt programvarearkitektur er <a href="https://no.wikipedia.org/wiki/Modell%E2%80%93visning%E2%80%93kontroller">Modell-Visning-Kontroller</a>
+(en. MVC - Model View Controller).</p>
+<img src="{{url_for('static', filename='images/mvc-arkitektur.png')}}" height="300" class="center" />
+
+<p>Figur ovenfor viser bruken av denne modellen i denne demoen. Det er et forsøk på å påpeke at utvikling og testing gjøres på en lokal datamaskin, 
+KLIENT og SERVER er simulert som prosesser i datamaskinens operativsystem.</p>
+
+<p><b>View</b>-delen er i denne demoen representert med mappen <b>templates</b>, hvor alle malene for html-filene ligger. Prosessering av disse filene 
+foregår på KLIENT-siden (eller i KLIENT-prosessen når utviklingen foregår på en datamaskin). Malene er fysisk lagret på SERVER.</p>
+
+<p><b>Model</b>-delen i denne demoen er representert med en Excel-fil med navn <b>kgdata.xlsx</b>, som må være tilgjengelig på filsystemet (samme som i OBLIG 3). 
+Python-filene som er relatert til <b>Model</b>-delen er <b>intitialdb.py</b> og <b>dbexcel.py</b>, samt selve definisjon av modellen, som klasser i Python i filen <b>kgmodel.py</b>. 
+</p> 
+
+<p><b>Kontroller</b>-delen er representert i filen <b>kgcontroller.py</b> og inkluderer følgende kontrakter:
+<ul>
+<li>insert_foresatt(f)</li>
+<li>insert_barn(b)</li>
+<li>insert_soknad(s)</li>
+<li>select_alle_barnehager()</li>
+<li>select_foresatt(f_navn)</li>
+<li>select_barn(b_pnr)</li>
+<li>commit()</li>
+<li>form_to_object_soknad(sd)</li>
+</ul>
+
+
+</p>
+
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+<!-- Skriv inn din kode her for å returnere svar for bruksscenario om svar på en søknad. --> 
+{% block content %}
+<table border=1>
+	{% for k,v in data.items() %}
+	<tr>
+		<th>{{ k }}</th>
+		<td>{{ v }}</td>
+	</tr>
+	{% endfor %}
+</table>
+{% endblock %}
