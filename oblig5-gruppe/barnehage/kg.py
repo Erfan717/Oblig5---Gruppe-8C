@@ -58,3 +58,8 @@ Referanser
 Søkeuttrykk
 
 """
+
+
+# kg.py
+if __name__ == "__main__":
+    app.run(port=5001)  # Start serveren på port 5001

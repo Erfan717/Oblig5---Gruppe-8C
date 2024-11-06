@@ -1,12 +1,10 @@
 {% extends 'base.html' %}
-<!-- Skriv inn din kode her for å returnere svar for bruksscenario om svar på en søknad. --> 
+
 {% block content %}
-<table border=1>
-	{% for k,v in data.items() %}
-	<tr>
-		<th>{{ k }}</th>
-		<td>{{ v }}</td>
-	</tr>
-	{% endfor %}
-</table>
+<h2>Søknadsstatus</h2>
+{% if resultat == "TILBUD" %}
+    <p>Gratulerer! Din søknad har blitt godkjent, og du har fått TILBUD om barnehageplass.</p>
+{% else %}
+    <p>Beklager, det er for tiden ingen ledige plasser som tilfredsstiller kriteriene. Din søknad fikk AVSLAG.</p>
+{% endif %}
 {% endblock %}

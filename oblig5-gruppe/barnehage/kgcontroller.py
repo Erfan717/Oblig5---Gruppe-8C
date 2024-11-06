@@ -203,3 +203,27 @@ def test_df_to_object_list():
                              r['barnehage_antall_plasser'],
                              r['barnehage_ledige_plasser']),
          axis=1).to_list()[0].barnehage_navn == "Sunshine Preschool"
+    
+    
+    
+    
+    
+    
+    # kgcontroller.py
+def vurder_soknad(soknad_data):
+    # Eksempeldata som skal trekkes fra soknad_data, juster som nødvendig
+    prioriterte_barnehager = soknad_data.get("liste_over_barnehager_prioritert_5")
+    fortrinnsrett = soknad_data.get("fortrinnsrett_barnevern") or \
+                    soknad_data.get("fortrinnsrett_sykdom_i_familien") or \
+                    soknad_data.get("fortrinnsrett_sykdome_paa_barnet")
+    
+    # Simuler sjekk mot ledige plasser for prioriterte barnehager
+    ledige_plasser = 0
+    for barnehage in prioriterte_barnehager:
+        ledige_plasser += dbexcel.select_ledige_plasser(barnehage)  # Eksempel-funksjon for å sjekke ledige plasser
+    
+    if ledige_plasser > 0 or fortrinnsrett:
+        return "TILBUD"
+    return "AVSLAG"
+
+
