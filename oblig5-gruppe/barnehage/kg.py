@@ -40,6 +40,10 @@ def svar():
 def commit():
     commit_all()
     return render_template('commit.html')
+
+@app.route('/statistikk')
+def statistikk():
+    return render_template('statistikk.html')
 """
 @app.route('/admin/soknader')
 def soknader():
