@@ -1,6 +1,7 @@
 # kgcontroller module
 import pandas as pd
 import numpy as np
+import altair as alt
 from dbexcel import *
 from kgmodel import *
 
@@ -225,5 +226,28 @@ def vurder_soknad(soknad_data):
     if ledige_plasser > 0 or fortrinnsrett:
         return "TILBUD"
     return "AVSLAG"
-
-
+"""
+    #Lage diagram for en valgt kommune under fanen statistikk
+def diagram_for_valgt_kommune(valgt_kommune):
+        if valgt_kommune in df['kom'].values:
+        # Filtrerer DataFrame for den valgte kommunen
+        df_kommune = df[df['kom'] == valgt_kommune].melt(id_vars=['kom'], 
+                                                     value_vars=['y15', 'y16', 'y17', 'y18', 'y19', 'y20', 'y21', 'y22', 'y23'],
+                                                     var_name='years', 
+                                                     value_name='prosent')
+        
+        # Lager et søylediagram med Altair
+        diagram = alt.Chart(df_kommune).mark_bar().encode(
+            x='years:N',
+            y='prosent:Q',
+            tooltip=['years', 'prosent']
+        ).properties(
+            title=f'Prosent av barn i ett- og to-årsalderen i barnehagen for {valgt_kommune}'
+        )
+        
+        # For å lagre som en HTML-fil
+        diagram.save('diagram.html')
+        print("Diagrammet er lagret som 'diagram.html'.")
+    else:
+        print(f"Kommunen {kom_name} finnes ikke i dataene.")
+"""

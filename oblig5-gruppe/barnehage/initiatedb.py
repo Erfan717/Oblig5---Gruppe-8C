@@ -64,19 +64,29 @@ def initiate_db(db_name):
                        'sosken__i_barnehagen',
                        'tidspunkt_oppstart',
                        'brutto_inntekt']
+    kolonner_statistikk = ['kom',
+                           'y15',
+                           'y16',
+                           'y17',
+                           'y18',
+                           'y19',
+                           'y20',
+                           'y21',
+                           'y22',
+                           'y23']
     
     forelder = pd.DataFrame(columns = kolonner_forelder)
     barnehage = pd.DataFrame(barnehage_liste, columns = kolonner_barnehage)
     barn = pd.DataFrame(columns = kolonner_barn)
     soknad  = pd.DataFrame(columns = kolonner_soknad)
-    
+    statistikk  = pd.DataFrame(columns = kolonner_statistikk)
     
     with pd.ExcelWriter(db_name) as writer:  
         forelder.to_excel(writer, sheet_name='foresatt')
         barnehage.to_excel(writer, sheet_name='barnehage')
         barn.to_excel(writer, sheet_name='barn')
         soknad.to_excel(writer, sheet_name='soknad')
-    
+        statistikk.to_excel(writer, sheet_name='statistikk')
     """
     b1 = Barn(1, "09012356472")
     f1 = Foresatt(1, "Ole Nordmann", "Bekkeveien 100", "98434344", "09079089332")

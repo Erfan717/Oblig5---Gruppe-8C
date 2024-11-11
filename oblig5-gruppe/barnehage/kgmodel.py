@@ -62,6 +62,20 @@ class Soknad:
     tidspunkt_oppstart: str
     brutto_inntekt: int
     
+@dataclass
+class Statistikk:
+    kom: str
+    y15: float
+    y16: float
+    y17: float
+    y18: float
+    y19: float
+    y20: float
+    y21: float
+    y22: float
+    y23: float
+    
+    
     
 
 
