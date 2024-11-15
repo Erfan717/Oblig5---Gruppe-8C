@@ -2,6 +2,10 @@
 import pandas as pd
 import numpy as np
 import altair as alt
+from flask import render_template
+from flask import render_template_string
+from flask import request
+from flask import redirect
 from dbexcel import *
 from kgmodel import *
 
@@ -226,10 +230,19 @@ def vurder_soknad(soknad_data):
     if ledige_plasser > 0 or fortrinnsrett:
         return "TILBUD"
     return "AVSLAG"
-"""
+
     #Lage diagram for en valgt kommune under fanen statistikk
+
+#Lese inn data, fra fil lokal på mac:
+kgdata = pd.read_excel("ssb-barnehager-2015-2023-alder-1-2-aar.xlsm", sheet_name="VASKET",
+                       header=3,
+                       names=['kom','y15','y16','y17','y18','y19','y20','y21','y22','y23'],
+                       na_values=['.', '..'])
+
+df = pd.DataFrame(kgdata)
+
 def diagram_for_valgt_kommune(valgt_kommune):
-        if valgt_kommune in df['kom'].values:
+    if valgt_kommune in df['kom'].values:
         # Filtrerer DataFrame for den valgte kommunen
         df_kommune = df[df['kom'] == valgt_kommune].melt(id_vars=['kom'], 
                                                      value_vars=['y15', 'y16', 'y17', 'y18', 'y19', 'y20', 'y21', 'y22', 'y23'],
@@ -245,9 +258,27 @@ def diagram_for_valgt_kommune(valgt_kommune):
             title=f'Prosent av barn i ett- og to-årsalderen i barnehagen for {valgt_kommune}'
         )
         
-        # For å lagre som en HTML-fil
-        diagram.save('diagram.html')
-        print("Diagrammet er lagret som 'diagram.html'.")
-    else:
-        print(f"Kommunen {kom_name} finnes ikke i dataene.")
-"""
+    
+        chart_html = diagram.to_html()
+    
+        return render_template_string("""
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                            <title>Diagram for {{ kommune }}</title>
+                        </head>
+                        <body>
+                            <h1>Diagram for {{ kommune }}</h1>
+                            {{ chart|safe }}
+                            <br><br>
+                            <a href="/statistikk">Tilbake til søk</a>
+                        </body>
+                        </html>
+                    """, kommune=valgt_kommune, chart=chart_html)
+        # If municipality is not found in the DataFrame
+    return f"Kommune {valgt_kommune} finnes ikke i datasettet.", 404
+
+
+

@@ -5,7 +5,7 @@ from flask import request
 from flask import redirect
 from flask import session
 from kgmodel import (Foresatt, Barn, Soknad, Barnehage)
-from kgcontroller import (form_to_object_soknad, insert_soknad, commit_all, select_alle_barnehager)
+from kgcontroller import (form_to_object_soknad, insert_soknad, commit_all, select_alle_barnehager, diagram_for_valgt_kommune)
 
 app = Flask(__name__)
 app.secret_key = 'BAD_SECRET_KEY' # nødvendig for session
@@ -44,6 +44,20 @@ def commit():
 @app.route('/statistikk')
 def statistikk():
     return render_template('statistikk.html')
+
+
+@app.route('/vis', methods=['GET', 'POST'])
+def vis():
+    if request.method == 'POST':
+        valgt_kommune = request.form['valgt_kommune']
+        # Generate the chart for the selected municipality and return the HTML
+        return diagram_for_valgt_kommune(valgt_kommune)
+    # In case of GET, redirect to the form page to select municipality
+    return render_template('statistikk.html')
+
+
+   
+
 """
 @app.route('/admin/soknader')
 def soknader():

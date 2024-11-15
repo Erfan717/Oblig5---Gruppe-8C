@@ -5,9 +5,11 @@
 <p>Her vises et søylediagram over utvikling av prosentandel barn i barnehage i 1-2 års alderen for en valgt kommune.
 </p>
 
-<form method="POST" action="/behandle"> 
+<form action="/vis" method="POST"> 
 	<label for="kom">Valgt kommune:</label> 
 	<input type="text" name="valgt_kommune" />
+	<input type="submit" value="Vis">
     <br> 
+</form>
 
 {% endblock %}
