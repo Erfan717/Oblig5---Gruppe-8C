@@ -1,6 +1,6 @@
 from flask import Flask, url_for, render_template, request, redirect, session
 from kgmodel import (Foresatt, Barn, Soknad, Barnehage)
-from kgcontroller import (form_to_object_soknad, insert_soknad, commit_all, select_alle_barnehager, diagram_for_valgt_kommune, vurder_soknad)
+from kgcontroller import (form_to_object_soknad, insert_soknad, commit_all, select_alle_barnehager, diagram_for_valgt_kommune, vurder_soknad, select_alle_soknader)
 
 app = Flask(__name__)
 app.secret_key = 'BAD_SECRET_KEY'  # nødvendig for session
@@ -38,8 +38,21 @@ def svar():
 
 @app.route('/commit')
 def commit():
-    commit_all()
-    return render_template('commit.html')
+    global forelder, barnehage, barn, soknad
+    commit_all()  # Skriver alle data til Excel
+    # Henter data fra alle dataframes for å sende til malen
+    data = {
+        'foresatt': forelder.to_dict('records') if 'forelder' in globals() else [],
+        'barnehage': barnehage.to_dict('records') if 'barnehage' in globals() else [],
+        'barn': barn.to_dict('records') if 'barn' in globals() else [],
+        'soknad': soknad.to_dict('records') if 'soknad' in globals() else []
+    }
+    return render_template('commit.html', data=data)
+
+@app.route('/soknader')
+def soknader():
+    alle_soknader = select_alle_soknader()
+    return render_template('soknader.html', soknader=alle_soknader)
 
 @app.route('/statistikk')
 def statistikk():
@@ -54,4 +67,7 @@ def vis():
 
 if __name__ == "__main__":
     app.run(port=5001)
+    
+
+
 

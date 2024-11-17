@@ -286,3 +286,10 @@ def diagram_for_valgt_kommune(valgt_kommune):
 
 
 
+
+def select_alle_soknader():
+    """Returnerer en liste med alle søknader i databasen."""
+    global soknad
+    return soknad.to_dict('records')
+
+
