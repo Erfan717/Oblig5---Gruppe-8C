@@ -1,14 +1,9 @@
-from flask import Flask
-from flask import url_for
-from flask import render_template
-from flask import request
-from flask import redirect
-from flask import session
+from flask import Flask, url_for, render_template, request, redirect, session
 from kgmodel import (Foresatt, Barn, Soknad, Barnehage)
-from kgcontroller import (form_to_object_soknad, insert_soknad, commit_all, select_alle_barnehager, diagram_for_valgt_kommune)
+from kgcontroller import (form_to_object_soknad, insert_soknad, commit_all, select_alle_barnehager, diagram_for_valgt_kommune, vurder_soknad)
 
 app = Flask(__name__)
-app.secret_key = 'BAD_SECRET_KEY' # nødvendig for session
+app.secret_key = 'BAD_SECRET_KEY'  # nødvendig for session
 
 @app.route('/')
 def index():
@@ -23,18 +18,23 @@ def barnehager():
 def behandle():
     if request.method == 'POST':
         sd = request.form
-        print(sd)
-        log = insert_soknad(form_to_object_soknad(sd))
-        print(log)
+        soknad_obj = form_to_object_soknad(sd)
+        insert_soknad(soknad_obj)  # Lagre søknaden
         session['information'] = sd
-        return redirect(url_for('svar')) #[1]
+        
+        # Bruk vurder_soknad til å avgjøre om søknaden får TILBUD eller AVSLAG
+        resultat = vurder_soknad(sd)
+        session['resultat'] = resultat  # Lagre resultatet i sesjonen for bruk i svar.html
+
+        return redirect(url_for('svar'))
     else:
         return render_template('soknad.html')
 
 @app.route('/svar')
 def svar():
-    information = session['information']
-    return render_template('svar.html', data=information)
+    information = session.get('information')
+    resultat = session.get('resultat')  # Hent resultatet fra sesjonen
+    return render_template('svar.html', data=information, resultat=resultat)  # Send resultat til malen
 
 @app.route('/commit')
 def commit():
@@ -45,39 +45,13 @@ def commit():
 def statistikk():
     return render_template('statistikk.html')
 
-
 @app.route('/vis', methods=['GET', 'POST'])
 def vis():
     if request.method == 'POST':
         valgt_kommune = request.form['valgt_kommune']
-        # Generate the chart for the selected municipality and return the HTML
         return diagram_for_valgt_kommune(valgt_kommune)
-    # In case of GET, redirect to the form page to select municipality
     return render_template('statistikk.html')
 
-
-   
-
-"""
-@app.route('/admin/soknader')
-def soknader():
-    information = select_alle_barnehager()
-    return render_template('barnehager.html', data=soknader)
-    return render_template('commit.html')
-"""
-
-
-"""
-Referanser
-[1] https://stackoverflow.com/questions/21668481/difference-between-render-template-and-redirect
-"""
-
-"""
-Søkeuttrykk
-
-"""
-
-
-# kg.py
 if __name__ == "__main__":
-    app.run(port=5001)  # Start serveren på port 5001
+    app.run(port=5001)
+

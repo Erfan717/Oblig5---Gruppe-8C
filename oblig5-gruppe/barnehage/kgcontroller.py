@@ -214,22 +214,26 @@ def test_df_to_object_list():
     
     
     
-    # kgcontroller.py
+from dbexcel import select_ledige_plasser
+
 def vurder_soknad(soknad_data):
-    # Eksempeldata som skal trekkes fra soknad_data, juster som nødvendig
-    prioriterte_barnehager = soknad_data.get("liste_over_barnehager_prioritert_5")
+    prioriterte_barnehager = soknad_data.get("liste_over_barnehager_prioritert_5").split(',')
     fortrinnsrett = soknad_data.get("fortrinnsrett_barnevern") or \
                     soknad_data.get("fortrinnsrett_sykdom_i_familien") or \
                     soknad_data.get("fortrinnsrett_sykdome_paa_barnet")
-    
-    # Simuler sjekk mot ledige plasser for prioriterte barnehager
-    ledige_plasser = 0
+
+    # Sjekk ledige plasser for prioriterte barnehager
     for barnehage in prioriterte_barnehager:
-        ledige_plasser += dbexcel.select_ledige_plasser(barnehage)  # Eksempel-funksjon for å sjekke ledige plasser
-    
-    if ledige_plasser > 0 or fortrinnsrett:
+        ledige_plasser = select_ledige_plasser(barnehage.strip())  # Bruk den nye funksjonen
+        if ledige_plasser > 0:
+            return "TILBUD"
+
+    # Hvis ingen ledige plasser men fortrinnsrett finnes
+    if fortrinnsrett:
         return "TILBUD"
+
     return "AVSLAG"
+
 
     #Lage diagram for en valgt kommune under fanen statistikk
 
