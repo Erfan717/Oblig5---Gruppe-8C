@@ -1,6 +1,7 @@
 from flask import Flask, url_for, render_template, request, redirect, session
 from kgmodel import (Foresatt, Barn, Soknad, Barnehage)
 from kgcontroller import (form_to_object_soknad, insert_soknad, commit_all, select_alle_barnehager, diagram_for_valgt_kommune, vurder_soknad, select_alle_soknader)
+from dbexcel import select_ledige_plasser  # Importer funksjonen for å sjekke ledige plasser
 
 app = Flask(__name__)
 app.secret_key = 'BAD_SECRET_KEY'  # nødvendig for session
@@ -51,8 +52,32 @@ def commit():
 
 @app.route('/soknader')
 def soknader():
-    alle_soknader = select_alle_soknader()
-    return render_template('soknader.html', soknader=alle_soknader)
+    alle_soknader = select_alle_soknader()  # Henter alle søknader fra databasen
+    soknad_status = []
+
+    for soknad in alle_soknader:
+        prioriterte_barnehager = soknad['barnehager_prioritert'].split(',')
+        fortrinnsrett = soknad['fr_barnevern'] or soknad['fr_sykd_familie'] or soknad['fr_sykd_barn']
+
+        tilbud = False
+        # Sjekk ledige plasser for prioriterte barnehager
+        for barnehage in prioriterte_barnehager:
+            ledige_plasser = select_ledige_plasser(barnehage.strip())  # Bruker den importerte funksjonen
+            if ledige_plasser > 0:
+                tilbud = True
+                break
+
+        # Sett statusen til "TILBUD" eller "AVSLAG"
+        if tilbud or fortrinnsrett:
+            status = "TILBUD"
+        else:
+            status = "AVSLAG"
+
+        # Legg til statusen til søknaden
+        soknad['status'] = status
+        soknad_status.append(soknad)
+
+    return render_template('soknader.html', soknader=soknad_status)
 
 @app.route('/statistikk')
 def statistikk():
@@ -67,7 +92,3 @@ def vis():
 
 if __name__ == "__main__":
     app.run(port=5001)
-    
-
-
-

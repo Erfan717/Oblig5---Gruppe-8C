@@ -1,41 +1,31 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Alle Søknader</h2>
-
-<table border="1">
-    <thead>
-        <tr>
-            <th>Søknads-ID</th>
-            <th>Foresatt 1</th>
-            <th>Foresatt 2</th>
-            <th>Barn ID</th>
-            <th>Fortrinnsrett (Barnevern/Sykdom)</th>
-            <th>Prioriterte Barnehager</th>
-            <th>Tidspunkt for Oppstart</th>
-            <th>Brutto Inntekt</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% if soknader %}
+    <h2>Alle Søknader</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Søknads-ID</th>
+                <th>Foresatt 1</th>
+                <th>Foresatt 2</th>
+                <th>Barn</th>
+                <th>Fortrinnsrett</th>
+                <th>Prioriterte Barnehager</th>
+                <th>Status</th>  <!-- Legg til en kolonne for status -->
+            </tr>
+        </thead>
+        <tbody>
             {% for soknad in soknader %}
             <tr>
                 <td>{{ soknad['sok_id'] }}</td>
                 <td>{{ soknad['foresatt_1'] }}</td>
                 <td>{{ soknad['foresatt_2'] }}</td>
                 <td>{{ soknad['barn_1'] }}</td>
-                <td>{{ 'Ja' if soknad['fr_barnevern'] or soknad['fr_sykd_familie'] or soknad['fr_sykd_barn'] else 'Nei' }}</td>
+                <td>{{ "Ja" if soknad['fr_barnevern'] or soknad['fr_sykd_familie'] or soknad['fr_sykd_barn'] else "Nei" }}</td>
                 <td>{{ soknad['barnehager_prioritert'] }}</td>
-                <td>{{ soknad['tidspunkt_oppstart'] }}</td>
-                <td>{{ soknad['brutto_inntekt'] }}</td>
+                <td>{{ soknad['status'] }}</td>  <!-- Vise statusen (TILBUD/AVSLAG) -->
             </tr>
             {% endfor %}
-        {% else %}
-            <tr>
-                <td colspan="8">Ingen søknader funnet.</td>
-            </tr>
-        {% endif %}
-    </tbody>
-</table>
-
+        </tbody>
+    </table>
 {% endblock %}

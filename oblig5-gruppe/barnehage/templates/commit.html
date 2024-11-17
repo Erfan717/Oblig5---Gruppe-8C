@@ -1,5 +1,108 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<p>Alle endringene er skrevet til dbexcel!</p>
+<h2>Alle endringene er skrevet til dbexcel!</h2>
+
+<h3>Foresatt</h3>
+<table border="1">
+    <thead>
+        <tr>
+            <th>foresatt_id</th>
+            <th>foresatt_navn</th>
+            <th>foresatt_adresse</th>
+            <th>foresatt_tlfnr</th>
+            <th>foresatt_pnr</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in data['foresatt'] %}
+        <tr>
+            <td>{{ row['foresatt_id'] }}</td>
+            <td>{{ row['foresatt_navn'] }}</td>
+            <td>{{ row['foresatt_adresse'] }}</td>
+            <td>{{ row['foresatt_tlfnr'] }}</td>
+            <td>{{ row['foresatt_pnr'] }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h3>Barnehage</h3>
+<table border="1">
+    <thead>
+        <tr>
+            <th>barnehage_id</th>
+            <th>barnehage_navn</th>
+            <th>barnehage_antall_plasser</th>
+            <th>barnehage_ledige_plasser</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in data['barnehage'] %}
+        <tr>
+            <td>{{ row['barnehage_id'] }}</td>
+            <td>{{ row['barnehage_navn'] }}</td>
+            <td>{{ row['barnehage_antall_plasser'] }}</td>
+            <td>{{ row['barnehage_ledige_plasser'] }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h3>Barn</h3>
+<table border="1">
+    <thead>
+        <tr>
+            <th>barn_id</th>
+            <th>barn_pnr</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in data['barn'] %}
+        <tr>
+            <td>{{ row['barn_id'] }}</td>
+            <td>{{ row['barn_pnr'] }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h3>Søknad</h3>
+<table border="1">
+    <thead>
+        <tr>
+            <th>sok_id</th>
+            <th>foresatt_1</th>
+            <th>foresatt_2</th>
+            <th>barn_1</th>
+            <th>fr_barnevern</th>
+            <th>fr_sykd_familie</th>
+            <th>fr_sykd_barn</th>
+            <th>fr_annet</th>
+            <th>barnehager_prioritert</th>
+            <th>sosken__i_barnehagen</th>
+            <th>tidspunkt_oppstart</th>
+            <th>brutto_inntekt</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in data['soknad'] %}
+        <tr>
+            <td>{{ row['sok_id'] }}</td>
+            <td>{{ row['foresatt_1'] }}</td>
+            <td>{{ row['foresatt_2'] }}</td>
+            <td>{{ row['barn_1'] }}</td>
+            <td>{{ row['fr_barnevern'] }}</td>
+            <td>{{ row['fr_sykd_familie'] }}</td>
+            <td>{{ row['fr_sykd_barn'] }}</td>
+            <td>{{ row['fr_annet'] }}</td>
+            <td>{{ row['barnehager_prioritert'] }}</td>
+            <td>{{ row['sosken__i_barnehagen'] }}</td>
+            <td>{{ row['tidspunkt_oppstart'] }}</td>
+            <td>{{ row['brutto_inntekt'] }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
 {% endblock %}
