@@ -1,9 +1,15 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<style>
+fieldset {background-color: lightblue;}
+h2   {color: darkblue;}
+p    {color: black;}
+</style>
 <h2>Statistikk</h2>
-<p>Her vises et søylediagram over utvikling av prosentandel barn i barnehage i 1-2 års alderen for en valgt kommune.
+<p>Her vises et søylediagram over utvikling av prosentandel barn i barnehage i 1-2 års alderen for alle kommuner i Norge.
 </p>
+<p>Skriv inn navnet til kommunen du ønsker statistikken på i søkefeltet </p>
 
 <form action="/vis" method="POST"> 
 	<label for="kom">Valgt kommune:</label> 

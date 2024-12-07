@@ -1,6 +1,21 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<style>
+fieldset {background-color: lightblue;}
+h2   {color: darkblue;}
+p    {color: black;}
+h3   {color: darkblue;}
+</style>
+<h2>Søk barnehageplass i Kristiansand kommune</h2>
+<fieldset>
+	<p>Søknadsfrist for hovedopptaket er 1. mars hvert år,</p>
+	<p>men det kan også søkes gjennom hele året. Søknader som sendes</p>
+	<p>inn etter 1. mars er med på løpende opptak etter at hovedopptaket er ferdig.</p>
+</fieldset>
+
+<p> </p>
+<h3>Søknad:</h3>
 <form method="POST" action="/behandle"> 
 	<label for="navn_forelder_1">Navn - Forelder 1:</label> 
 	<input type="text" id="navn_forelder_1" name="navn_forelder_1" />
