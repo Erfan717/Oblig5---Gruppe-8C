@@ -8,7 +8,7 @@ from flask import request
 from flask import redirect
 from dbexcel import *
 from kgmodel import *
-
+from dbexcel import select_ledige_plasser
 
 # CRUD metoder
 
@@ -118,16 +118,6 @@ def select_barn(b_pnr):
     else:
         return series.iloc[0] # returnerer kun det første elementet i series
     
-    
-# --- Skriv kode for select_soknad her
-
-
-# ------------------
-# Update
-
-
-# ------------------
-# Delete
 
 
 # ----- Persistent lagring ------
@@ -213,8 +203,7 @@ def test_df_to_object_list():
     
     
     
-    
-from dbexcel import select_ledige_plasser
+
 
 def vurder_soknad(soknad_data):
     prioriterte_barnehager = soknad_data.get("liste_over_barnehager_prioritert_5").split(',')

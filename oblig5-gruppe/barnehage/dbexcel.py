@@ -11,7 +11,6 @@ soknad = pd.read_excel(kgdata, 'soknad', index_col=0)
 statistikk = pd.read_excel(kgdata, 'statistikk', index_col=0)
 
 
-import pandas as pd
 
 # Forutsetter at barnehagedataene er lagret i en sheet med navn "barnehage" i kgdata.xlsx
 barnehage_df = pd.read_excel('kgdata.xlsx', sheet_name='barnehage')
